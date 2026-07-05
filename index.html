@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蚁伴视频生成案例指南</title>
+<style>
+  :root {
+    --bg: #f5f5f5;
+    --card-bg: #fff;
+    --text: #333;
+    --text-secondary: #666;
+    --border: #e0e0e0;
+    --accent: #4a90d9;
+    --tag-easy: #4caf50;
+    --tag-mid: #ff9800;
+    --tag-hard: #f44336;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+  body {
+    font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 0;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    padding: 48px 24px 36px;
+    text-align: center;
+  }
+  .header h1 { font-size: 2em; margin-bottom: 12px; }
+  .header .meta { font-size: 0.95em; opacity: 0.85; }
+  .header .meta span { margin: 0 12px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+  .main-content { flex: 1; min-width: 0; }
+
+  /* Knowledge box */
+  .knowledge {
+    background: #fff3e0;
+    border-left: 4px solid #ff9800;
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .knowledge h3 { color: #e65100; margin-bottom: 10px; }
+  .knowledge table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .knowledge th, .knowledge td {
+    border: 1px solid #ffe0b2;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 0.9em;
+  }
+  .knowledge th { background: #fff8e1; font-weight: 600; }
+  .knowledge blockquote {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #fff8e1;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #795548;
+  }
+
+  /* Section header */
+  .section-title {
+    font-size: 1.5em;
+    margin: 40px 0 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    color: #1a1a2e;
+  }
+
+  /* Case card */
+  .case {
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 28px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .case:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+  .case-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
+  }
+  .case-header h3 { font-size: 1.15em; }
+  .difficulty {
+    display: inline-block;
+    font-size: 0.85em;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .diff-easy { background: #e8f5e9; color: #2e7d32; }
+  .diff-mid { background: #fff3e0; color: #e65100; }
+  .diff-hard { background: #fce4ec; color: #c62828; }
+  .case-body { padding: 20px 24px; }
+
+  /* Case sections */
+  .case-body h4 {
+    font-size: 1em;
+    color: var(--accent);
+    margin: 16px 0 8px;
+  }
+  .case-body h4:first-child { margin-top: 0; }
+  .case-body .desc {
+    background: #f5f7fa;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 0.92em;
+    color: #555;
+    margin-bottom: 12px;
+  }
+  .case-body .warning {
+    background: #fff3e0;
+    border-left: 3px solid #ff9800;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 10px 0 14px;
+    font-size: 0.9em;
+    color: #795548;
+  }
+  .case-body blockquote {
+    background: #f8f9fb;
+    border-left: 3px solid var(--accent);
+    padding: 10px 16px;
+    margin: 8px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.95em;
+    white-space: pre-wrap;
+  }
+
+  /* Tables */
+  .param-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px;
+    font-size: 0.9em;
+  }
+  .param-table th, .param-table td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  .param-table th {
+    background: #f5f7fa;
+    font-weight: 600;
+    width: 120px;
+  }
+
+  /* Media */
+  .case-body img {
+    max-width: 100%;
+    border-radius: 6px;
+    margin: 8px 0;
+    display: block;
+  }
+  .case-body video {
+    max-width: 100%;
+    border-radius: 6px;
+    margin: 8px 0;
+    display: block;
+  }
+  .case-body audio {
+    margin: 8px 0;
+    display: block;
+  }
+  .media-label {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    margin: 10px 0 4px;
+    font-weight: 500;
+  }
+
+  /* Index */
+  .index-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 0.9em;
+  }
+  .index-table th, .index-table td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  .index-table th {
+    background: #1a1a2e;
+    color: #fff;
+  }
+  .index-table tr:nth-child(even) { background: #fafafa; }
+
+  .divider {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 24px 0;
+  }
+
+  /* Sidebar */
+  .layout { display: flex; max-width: 1360px; margin: 0 auto; padding: 24px 16px 48px; gap: 24px; }
+  .sidebar {
+    width: 260px; min-width: 260px; flex-shrink: 0;
+    position: sticky; top: 16px; align-self: flex-start;
+    max-height: calc(100vh - 32px); overflow-y: auto;
+    background: var(--card-bg); border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 16px 0;
+    font-size: 0.88em;
+  }
+  .sidebar-title { font-weight: 700; padding: 0 16px 10px; color: #1a1a2e; font-size: 1.05em; }
+  .sidebar a, .sidebar .nav-group-title {
+    display: block; padding: 6px 16px; color: #444; text-decoration: none;
+    cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s;
+  }
+  .sidebar a:hover, .sidebar .nav-group-title:hover {
+    background: #f5f7fa; color: var(--accent); border-left-color: var(--accent);
+  }
+  .sidebar .nav-group-title { font-weight: 600; color: #1a1a2e; padding: 8px 16px; margin-top: 2px; }
+  .sidebar .nav-group-title::before {
+    content: ''; display: inline-block; width: 0; height: 0;
+    border: 5px solid transparent; border-left-color: #888; margin-right: 6px;
+    vertical-align: middle; transition: transform 0.2s;
+  }
+  .sidebar .nav-group-title.open::before { transform: rotate(90deg); }
+  .sidebar .nav-group ul { list-style: none; overflow: hidden; transition: max-height 0.3s; }
+  .sidebar .nav-group ul.collapsed { max-height: 0 !important; }
+  .sidebar .nav-group ul a { padding-left: 36px; font-size: 0.93em; }
+  .sidebar .nav-top-link { font-weight: 500; }
+  .sidebar hr { margin: 8px 16px; border: none; border-top: 1px solid var(--border); }
+  .main-content { flex: 1; min-width: 0; }
+
+  @media (max-width: 860px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; min-width: unset; position: static; max-height: none; }
+  }
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.4em; }
+    .case-body { padding: 14px 16px; }
+    .case-header { padding: 12px 16px; flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>蚁伴视频生成案例指南</h1>
+  <div class="meta">
+    <span>作者：黄凯旋</span>
+    <span>湖南蚂蚁塔科技有限公司</span>
+  </div>
+  <p style="margin-top:10px;opacity:0.75;font-size:0.9em;">本文档按难度循序渐进整理了视频生成模型的典型用法。每个案例包含提示词、输入素材、输入参数、成品、说明五部分，普通用户照着做即可。</p>
+</div>
+
+<div class="layout">
+
+<!-- ====== 侧栏导航 ====== -->
+<nav class="sidebar">
+  <div class="sidebar-title">导航目录</div>
+  <a href="#about-avatar" class="nav-top-link">关于人像素材</a>
+  <hr>
+  <div class="nav-group">
+    <div class="nav-group-title open" data-target="nav-beginner">入门篇</div>
+    <ul id="nav-beginner">
+      <li><a href="#case1">案例 1：雏菊花田</a></li>
+      <li><a href="#case2">案例 2：女孩与狐狸</a></li>
+      <li><a href="#case3">案例 3：玻璃蛙微距</a></li>
+      <li><a href="#case4">案例 4：京剧花旦</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title open" data-target="nav-intermediate">进阶级</div>
+    <ul id="nav-intermediate">
+      <li><a href="#case5">案例 5：360 度环绕</a></li>
+      <li><a href="#case6">案例 6：替换画面物体</a></li>
+      <li><a href="#case7">案例 7：房屋外观改造</a></li>
+      <li><a href="#case8">案例 8：多段视频串联</a></li>
+      <li><a href="#case9">案例 9：沙漠绿洲</a></li>
+    </ul>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title open" data-target="nav-expert">高手篇</div>
+    <ul id="nav-expert">
+      <li><a href="#case10">案例 10：果茶广告</a></li>
+      <li><a href="#case11">案例 11：冰淇淋云朵</a></li>
+      <li><a href="#case12">案例 12：越野摩托广告</a></li>
+      <li><a href="#case13">案例 13：美妆带货</a></li>
+      <li><a href="#case14">案例 14：二次编辑</a></li>
+    </ul>
+  </div>
+  <hr>
+  <a href="#index" class="nav-top-link">快速索引</a>
+</nav>
+
+<!-- ====== 主内容区 ====== -->
+<div class="main-content">
+
+<!-- ====== 关于人像素材 ====== -->
+<div class="knowledge" id="about-avatar">
+  <h3>关于人像素材</h3>
+  <p>Seedance 2.0 系列模型<strong>不支持直接上传含有真人人脸的参考图或视频</strong>。平台提供了四种合规方案：</p>
+  <table>
+    <tr><th>方案</th><th>适用场景</th></tr>
+    <tr><td><strong>预置虚拟人像库</strong></td><td>需要真人风格人脸但无需指定具体人物。平台提供免费、合规的虚拟人像，零合规风险，快速创作。</td></tr>
+    <tr><td><strong>虚拟私域虚拟人像库</strong></td><td>为企业或创作者创建专属的私有虚拟人像，形象仅供本账号使用，可自定义形象特征，保护品牌 IP 的独特性与专属权。</td></tr>
+    <tr><td><strong>信任模型产物</strong></td><td>本账号下近 30 天内由 Seedance 2.0 或 Seedream 5.0 生成的含人脸视频/图片，可直接作为输入素材进行二次创作，不会触发人脸审核拦截。注意仅限同账号、原始产物、有效期内使用。</td></tr>
+    <tr><td><strong>已授权真人素材</strong></td><td>通过真人认证和本人授权后，将该真人的图片/视频/音频上传至平台，获得资产 ID 后即可使用。适合有固定真人 IP 的创作者。</td></tr>
+  </table>
+  <blockquote>案例 13（虚拟人像带货）和案例 14（模型产物二次编辑）分别演示了前两种方案的实际用法。</blockquote>
+</div>
+
+<!-- ====== 入门篇 ====== -->
+<h2 class="section-title" id="beginner">入门篇：零基础，一句话或一张图即可</h2>
+
+<!-- 案例 1 -->
+<div class="case" id="case1">
+  <div class="case-header">
+    <h3>案例 1：文生视频 — 雏菊花田</h3>
+    <span class="difficulty diff-easy">难度 ★☆☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：最简单的方式——只需一句话描述想要的画面，AI 就能生成视频。无需任何素材，适合初次体验。</div>
+    <h4>提示词</h4>
+    <blockquote>写实风格，晴朗的蓝天之下，一大片白色的雏菊花田，镜头逐渐拉近，最终定格在一朵雏菊花的特写上，花瓣上有几颗晶莹的露珠</blockquote>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>16:9</td></tr>
+      <tr><th>视频时长</th><td>5 秒</td></tr>
+      <tr><th>生成音频</th><td>否</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case01-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 2 -->
+<div class="case" id="case2">
+  <div class="case-header">
+    <h3>案例 2：图生视频（首帧）— 女孩与狐狸</h3>
+    <span class="difficulty diff-easy">难度 ★☆☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：提供一张图片作为视频开头，AI 帮你让静态画面"动起来"。图片中的角色和场景会被保留，同时按照提示词描述产生自然的动作。开启"生成音频"后还会自动配上环境音（如风声）。</div>
+    <h4>提示词</h4>
+    <blockquote>女孩抱着狐狸，女孩睁开眼，温柔地看向镜头，狐狸友善地抱着，镜头缓缓拉出，女孩的头发被风吹动，可以听到风声</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">首帧图片（女孩抱着狐狸）：</p>
+    <img src="seedance-media/case02-input-firstframe.png" alt="首帧-女孩与狐狸">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>自适应</td></tr>
+      <tr><th>视频时长</th><td>5 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case02-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 3 -->
+<div class="case" id="case3">
+  <div class="case-header">
+    <h3>案例 3：文生视频 + 联网搜索 — 玻璃蛙微距</h3>
+    <span class="difficulty diff-easy">难度 ★☆☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：当你不太了解画面中某个事物的具体样貌（比如玻璃蛙长什么样），可以开启联网搜索，AI 会自动搜索相关资料，生成更真实准确的视频。</div>
+    <h4>提示词</h4>
+    <blockquote>微距镜头对准叶片上翠绿的玻璃蛙。焦点逐渐从它光滑的皮肤，转移到它完全透明的腹部，一颗鲜红的心脏正在有力地、规律地收缩扩张。</blockquote>
+    <p style="color:#888;font-size:0.88em;margin-top:4px;">（同时开启联网搜索："玻璃蛙的容貌特征"）</p>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>16:9</td></tr>
+      <tr><th>视频时长</th><td>11 秒</td></tr>
+      <tr><th>联网搜索</th><td>开启</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case03-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 4 -->
+<div class="case" id="case4">
+  <div class="case-header">
+    <h3>案例 4：图生视频（首帧）— 京剧花旦</h3>
+    <span class="difficulty diff-easy">难度 ★★☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：同样是首帧图生视频，但提示词更进阶——加入了具体的唱词和表演细节描述，适合生成有人物表演的视频。</div>
+    <h4>提示词</h4>
+    <blockquote>镜头围绕人物推镜头拉近，特写人物面部，她正在用京剧唱腔唱"月移花影，疑是玉人来"，唱词充满情感，唱腔充满传统京剧特有的韵味与技巧，完美体现了花旦角色的内心世界</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">首帧图片（京剧花旦）：</p>
+    <img src="seedance-media/case04-input-firstframe.jpg" alt="首帧-京剧花旦">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>自适应</td></tr>
+      <tr><th>视频时长</th><td>默认（5 秒）</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case04-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- ====== 进阶级 ====== -->
+<h2 class="section-title" id="intermediate">进阶级：多张图 / 编辑视频 / 延长视频</h2>
+
+<!-- 案例 5 -->
+<div class="case" id="case5">
+  <div class="case-header">
+    <h3>案例 5：首尾帧生视频 — 360 度环绕</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：提供开头和结尾两张图片，AI 自动生成平滑过渡的中间画面。本例用"360度环绕运镜"让你的照片动起来。</div>
+    <div class="warning"><strong>注意：</strong>如果你的素材图片含有真实人脸，需要先将其上传到<strong>虚拟人像库</strong>（或完成真人授权认证），获得素材标识后再使用。否则可能因人脸审核不通过导致生成失败。详见文档开头的"关于人像素材"。</div>
+    <h4>提示词</h4>
+    <blockquote>图中女孩对着镜头说"茄子"，360度环绕运镜</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">首帧图片：</p>
+    <img src="seedance-media/case05-input-firstframe.jpeg" alt="首帧">
+    <p class="media-label">尾帧图片：</p>
+    <img src="seedance-media/case05-input-lastframe.jpeg" alt="尾帧">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>自适应</td></tr>
+      <tr><th>视频时长</th><td>5 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case05-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 6 -->
+<div class="case" id="case6">
+  <div class="case-header">
+    <h3>案例 6：编辑视频 — 替换画面中的物体</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：将视频中的某个物品替换为另一个物品（本例：礼盒中的香水 → 面霜），运镜和场景保持不变。非常适合电商产品展示。</div>
+    <h4>提示词</h4>
+    <blockquote>将视频1礼盒中的香水替换成图片1中的面霜，运镜不变</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">待编辑的视频（香水礼盒展示）：</p>
+    <video src="seedance-media/case06-input-video.mp4" controls width="100%"></video>
+    <p class="media-label">替换用的参考图（面霜产品）：</p>
+    <img src="seedance-media/case06-input-product.jpg" alt="面霜产品">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>16:9</td></tr>
+      <tr><th>视频时长</th><td>5 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case06-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 7 -->
+<div class="case" id="case7">
+  <div class="case-header">
+    <h3>案例 7：编辑视频 — 房屋外观改造</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：修改视频中房屋的外观（外墙颜色），同时参考另一张图片的天气和光线氛围。这个技巧可用于建筑外观设计预览。</div>
+    <h4>提示词</h4>
+    <blockquote>将视频1中的房子外立面墙壁刷成蓝色，天气和光线参考图片1的雪天</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">待编辑的视频（房屋外观）：</p>
+    <video src="seedance-media/case07-input-video.mp4" controls width="100%"></video>
+    <p class="media-label">参考图（雪天场景）：</p>
+    <img src="seedance-media/case07-input-snow.jpg" alt="雪天参考">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>生成音频</th><td>是（默认）</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case07-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 8 -->
+<div class="case" id="case8">
+  <div class="case-header">
+    <h3>案例 8：延长视频 — 多段视频串联</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：将多段独立的视频片段串联成一个连贯的长视频，AI 自动生成各片段之间的过渡画面。最多支持 3 个视频片段。</div>
+    <h4>提示词</h4>
+    <blockquote>视频1中的拱形窗户打开，进入美术馆室内，接视频2，之后镜头进入画内，接视频3</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">视频1（拱形窗户）：</p>
+    <video src="seedance-media/case08-input-video1.mp4" controls width="100%"></video>
+    <p class="media-label">视频2（美术馆室内）：</p>
+    <video src="seedance-media/case08-input-video2.mp4" controls width="100%"></video>
+    <p class="media-label">视频3（画作）：</p>
+    <video src="seedance-media/case08-input-video3.mp4" controls width="100%"></video>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>16:9</td></tr>
+      <tr><th>视频时长</th><td>8 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case08-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 9 -->
+<div class="case" id="case9">
+  <div class="case-header">
+    <h3>案例 9：延长视频 — 沙漠绿洲</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：在原有视频基础上向后延长，并添加背景音乐。本例：汽车行驶视频延长到沙漠绿洲场景，配合背景音乐。</div>
+    <h4>提示词</h4>
+    <blockquote>将视频1向后延长，11秒视频，汽车丝滑行驶到一片沙漠绿洲，背景音乐使用音频1</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">待延长的视频（汽车行驶）：</p>
+    <video src="seedance-media/case09-input-video.mp4" controls width="100%"></video>
+    <p class="media-label">背景音乐（汽车背景音.mp3）：</p>
+    <audio src="seedance-media/case09-input-audio.mp3" controls></audio>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频时长</th><td>11 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case09-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- ====== 高手篇 ====== -->
+<h2 class="section-title" id="expert">高手篇：多模态混合 / 4K 超高清 / 虚拟人像</h2>
+
+<!-- 案例 10 -->
+<div class="case" id="case10">
+  <div class="case-header">
+    <h3>案例 10：多模态参考 — 果茶广告（图文音视频混合）</h3>
+    <span class="difficulty diff-hard">难度 ★★★★☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：同时使用文本、图片、视频、音频四种模态作为参考，生成全新的广告片。AI 会继承参考图片的角色形象和风格、参考视频的构图和运镜方式、参考音频的音色和旋律。</div>
+    <h4>提示词</h4>
+    <blockquote>全程使用视频1的第一视角构图，全程使用音频1作为背景音乐。第一人称视角果茶宣传广告，seedance牌「苹苹安安」苹果果茶限定款；首帧为图片1，你的手摘下一颗带晨露的阿克苏红苹果，轻脆的苹果碰撞声；2-4 秒：快速切镜，你的手将苹果块投入雪克杯，加入冰块与茶底，用力摇晃，冰块碰撞声与摇晃声卡点轻快鼓点，背景音：「鲜切现摇」；4-6 秒：第一人称成品特写，分层果茶倒入透明杯，你的手轻挤奶盖在顶部铺展，在杯身贴上粉红包标，镜头拉近看奶盖与果茶的分层纹理；6-8 秒：第一人称手持举杯，你将图片2中的果茶举到镜头前（模拟递到观众面前的视角），杯身标签清晰可见，背景音「来一口鲜爽」，尾帧定格为图片2。背景声音统一为女生音色。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">图片1（苹果）：</p>
+    <img src="seedance-media/case10-input-apple.jpg" alt="苹果">
+    <p class="media-label">图片2（果茶成品）：</p>
+    <img src="seedance-media/case10-input-tea.jpg" alt="果茶成品">
+    <p class="media-label">参考视频（第一视角构图参考）：</p>
+    <video src="seedance-media/case10-input-video.mp4" controls width="100%"></video>
+    <p class="media-label">参考音频（背景音乐）：</p>
+    <audio src="seedance-media/case10-input-audio.mp3" controls></audio>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>16:9</td></tr>
+      <tr><th>视频时长</th><td>11 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case10-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 11 -->
+<div class="case" id="case11">
+  <div class="case-header">
+    <h3>案例 11：多模态参考 — 冰淇淋云朵</h3>
+    <span class="difficulty diff-hard">难度 ★★★★☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：三张图片 + 一段音频的混合参考。画面从云端糖豆云变形为冰淇淋，再切回机舱内角色吃冰淇淋的场景，同时配合人声配音。适合创意转场类视频。</div>
+    <h4>提示词</h4>
+    <blockquote>以图片1为首帧，画面放大至飞机舷窗外，一团团云朵缓缓飘至画面中，其中一朵为彩色糖豆点缀的云朵，始终在画面中居中，然后缓缓变形为图片2中的冰淇淋，镜头推远回到机舱内，坐在窗边的图片3中的角色伸手从窗外拿进冰淇淋，吃了一口，嘴巴上沾满奶油，脸上洋溢出甜蜜的笑容，此时视频配音为音频1</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">图片1 — 机舱窗外（首帧）：</p>
+    <img src="seedance-media/case11-input-pic1.jpg" alt="机舱窗外">
+    <p class="media-label">图片2 — 彩色糖豆云朵：</p>
+    <img src="seedance-media/case11-input-pic2.jpg" alt="云朵">
+    <p class="media-label">图片3 — 角色：</p>
+    <img src="seedance-media/case11-input-pic3.jpg" alt="角色">
+    <p class="media-label">音频 — 冰淇淋配音：</p>
+    <audio src="seedance-media/case11-input-audio.mp3" controls></audio>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>生成音频</th><td>是（配合外部音频）</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case11-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 12 -->
+<div class="case" id="case12">
+  <div class="case-header">
+    <h3>案例 12：4K 超高清 — 越野摩托广告</h3>
+    <span class="difficulty diff-hard">难度 ★★★★★</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：生成 15 秒 4K 分辨率（3840×2160）广告级短片，包含 6 个分镜的详细描述，对同一角色和场景保持一致性。适合需要最高画质的商业交付场景。</div>
+    <h4>提示词</h4>
+    <blockquote>生成一段15秒的越野摩托竞技广告感短片。参考图片作为中段飞跃高潮的参考。镜头逻辑依次为：1）中景跟拍，车手从远处沿土坡高速逼近跳台；2）超近低机位后轮飞砂特写，轮胎抓地甩出大量泥土和砂石；3）中近景展示骑手控车、手部发力、悬挂压缩与机械震动；4）侧向英雄中景拍车手冲坡腾空飞跃，画面状态接近图一，泥土在逆光中大面积飞散；5）腾空近景帅气细节，突出头盔护目镜、手部控把、轮胎悬空或车身侧面局部；6）中景跟拍落地，悬挂压缩回弹，随后继续沿土坡赛道高速冲刺收尾。全片同一名骑手、同一辆车、同一条赛道，镜头景别和角度区分清楚，不重复，动作连贯，画面有真实越野跟拍抖动感、速度感、扬土感和夕阳逆光竞技氛围。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">参考图（越野摩托飞跃）：</p>
+    <img src="seedance-media/case12-input-moto.png" alt="越野摩托参考">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频分辨率</th><td>4K</td></tr>
+      <tr><th>视频比例</th><td>自适应</td></tr>
+      <tr><th>视频时长</th><td>15 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <p style="color:#888;font-size:0.9em;">（4K 视频由多个分镜拼接而成，效果预览如下）</p>
+    <video src="seedance-media/case12-output-2.mov" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 13 -->
+<div class="case" id="case13">
+  <div class="case-header">
+    <h3>案例 13：预置虚拟人像 — 美妆带货</h3>
+    <span class="difficulty diff-hard">难度 ★★★★★</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：使用平台预置的虚拟人像作为"演员"，结合你的产品图片，AI 自动生成一个完整的带货短视频。虚拟人像会自然地介绍产品、展示产品，并配有口播配音。无需真人出镜。</div>
+    <h4>提示词</h4>
+    <blockquote>固定机位，近景镜头，清新自然风格。在室内自然光下，图片1中美妆博主面带笑容，向镜头介绍图片2中的面霜。博主将手里的面霜展示给镜头，开心地说"挖到本命面霜了！"；接着她一边用手指轻轻蘸取面霜展示那种软糯感，一边说"质地像云朵一样软糯，一抹就吸收"；最后她把面霜涂抹在脸颊上，展示着水润透亮的皮肤，同时自信地说"熬夜急救、补水保湿全搞定"。要求画面中人物居中，完整展示人物的整个脑袋和上半身，始终对焦人脸，人脸始终清晰，纯净无任何字幕。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">虚拟人像（美妆博主 — 平台预置）：</p>
+    <img src="seedance-media/case13-input-avatar.jpg" alt="虚拟人像预览">
+    <p style="color:#888;font-size:0.88em;">选择的人像：<code>asset-20260401123823-6d4x2</code></p>
+    <p class="media-label">产品图（面霜）：</p>
+    <img src="seedance-media/case13-input-product.jpg" alt="面霜产品">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>自适应</td></tr>
+      <tr><th>视频时长</th><td>11 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case13-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- 案例 14 -->
+<div class="case" id="case14">
+  <div class="case-header">
+    <h3>案例 14：二次编辑 — 用模型产物继续创作</h3>
+    <span class="difficulty diff-hard">难度 ★★★★★</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：将上面案例 13 生成的视频作为新任务的输入素材，进行二次编辑。本例中：把视频里的面霜颜色从原色改为白色。这个技巧可以让你反复迭代优化视频。</div>
+    <h4>提示词</h4>
+    <blockquote>将面霜的颜色修改为白色</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">待编辑的视频（案例 13 生成的带货视频）：</p>
+    <video src="seedance-media/case14-input-video.mp4" controls width="100%"></video>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>豆包 Seedance 2.0</td></tr>
+      <tr><th>视频比例</th><td>16:9</td></tr>
+      <tr><th>视频时长</th><td>11 秒</td></tr>
+      <tr><th>生成音频</th><td>是</td></tr>
+    </table>
+    <h4>成品</h4>
+    <video src="seedance-media/case14-output.mp4" controls width="100%"></video>
+  </div>
+</div>
+
+<!-- ====== 快速索引 ====== -->
+<h2 class="section-title" id="index">快速索引</h2>
+<table class="index-table">
+  <tr><th>难度</th><th>案例</th><th>输入类型</th><th>核心能力</th></tr>
+  <tr><td>★</td><td>1. 雏菊花田</td><td>纯文本</td><td>文生视频</td></tr>
+  <tr><td>★</td><td>2. 女孩与狐狸</td><td>文本 + 1张图</td><td>图生视频（首帧）</td></tr>
+  <tr><td>★</td><td>3. 玻璃蛙</td><td>纯文本 + 联网</td><td>文生视频 + 联网搜索</td></tr>
+  <tr><td>★★</td><td>4. 京剧花旦</td><td>文本 + 1张图</td><td>图生视频 + 人物表演</td></tr>
+  <tr><td>★★★</td><td>5. 360度环绕</td><td>文本 + 首尾帧图</td><td>图生视频（首尾帧）</td></tr>
+  <tr><td>★★★</td><td>6. 替换产品</td><td>文本 + 视频 + 图</td><td>视频编辑</td></tr>
+  <tr><td>★★★</td><td>7. 房屋换色</td><td>文本 + 视频 + 图</td><td>视频编辑 + 氛围参考</td></tr>
+  <tr><td>★★★</td><td>8. 美术馆串联</td><td>文本 + 3段视频</td><td>延长视频</td></tr>
+  <tr><td>★★★</td><td>9. 沙漠绿洲</td><td>文本 + 视频 + 音频</td><td>延长视频 + 背景音乐</td></tr>
+  <tr><td>★★★★</td><td>10. 果茶广告</td><td>文本 + 2图 + 视频 + 音频</td><td>多模态参考</td></tr>
+  <tr><td>★★★★</td><td>11. 冰淇淋云朵</td><td>文本 + 3图 + 音频</td><td>多模态参考</td></tr>
+  <tr><td>★★★★★</td><td>12. 越野摩托</td><td>文本 + 1图 + 4K</td><td>超高清输出</td></tr>
+  <tr><td>★★★★★</td><td>13. 美妆带货</td><td>文本 + 虚拟人像 + 产品图</td><td>虚拟人像</td></tr>
+  <tr><td>★★★★★</td><td>14. 二次编辑</td><td>文本 + 模型产物视频</td><td>迭代创作</td></tr>
+</table>
+
+</div><!-- .main-content -->
+</div><!-- .layout -->
+
+<script>
+// 侧栏折叠导航
+document.querySelectorAll('.nav-group-title').forEach(function(el) {
+  el.addEventListener('click', function() {
+    this.classList.toggle('open');
+    var ul = document.getElementById(this.dataset.target);
+    if (ul) ul.classList.toggle('collapsed');
+  });
+});
+</script>
+</body>
+</html>
