@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>蚁伴视频生成案例指南</title>
+<title>蚁伴 AI 创作案例指南</title>
 <style>
   :root {
     --bg: #f5f5f5;
@@ -235,6 +235,23 @@
   .sidebar hr { margin: 8px 16px; border: none; border-top: 1px solid var(--border); }
   .main-content { flex: 1; min-width: 0; }
 
+  /* Tab 切换栏 */
+  .tab-bar {
+    display: flex; justify-content: center; gap: 10px;
+    max-width: 1360px; margin: 20px auto 0; padding: 0 16px;
+  }
+  .tab {
+    flex: 1; max-width: 280px; padding: 12px 24px;
+    font-size: 1.08em; font-weight: 600; cursor: pointer;
+    background: var(--card-bg); color: var(--text-secondary);
+    border: 2px solid var(--border); border-radius: 30px;
+    transition: all 0.15s;
+  }
+  .tab:hover { color: var(--accent); border-color: #cfe0f3; }
+  .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .nav-pane, .content-pane { display: none; }
+  .nav-pane.active, .content-pane.active { display: block; }
+
   @media (max-width: 860px) {
     .layout { flex-direction: column; }
     .sidebar { width: 100%; min-width: unset; position: static; max-height: none; }
@@ -249,12 +266,18 @@
 <body>
 
 <div class="header">
-  <h1>蚁伴视频生成案例指南</h1>
+  <h1>蚁伴 AI 创作案例指南</h1>
   <div class="meta">
     <span>作者：黄凯旋</span>
     <span>湖南蚂蚁塔科技有限公司</span>
   </div>
-  <p style="margin-top:10px;opacity:0.75;font-size:0.9em;">本文档按难度循序渐进整理了视频生成模型的典型用法。每个案例包含提示词、输入素材、输入参数、成品、说明五部分，普通用户照着做即可。</p>
+  <p style="margin-top:10px;opacity:0.75;font-size:0.9em;">本文档按难度循序渐进整理了视频与图片生成模型的典型用法。每个案例包含说明、提示词、输入素材、输入参数、成品五部分，普通用户照着做即可。</p>
+</div>
+
+<!-- ====== Tab 切换 ====== -->
+<div class="tab-bar">
+  <button class="tab active" data-tab="video">视频指南</button>
+  <button class="tab" data-tab="image">图片指南</button>
 </div>
 
 <div class="layout">
@@ -262,43 +285,92 @@
 <!-- ====== 侧栏导航 ====== -->
 <nav class="sidebar">
   <div class="sidebar-title">导航目录</div>
-  <a href="#about-avatar" class="nav-top-link">关于人像素材</a>
-  <hr>
-  <div class="nav-group">
-    <div class="nav-group-title open" data-target="nav-beginner">入门篇</div>
-    <ul id="nav-beginner">
-      <li><a href="#case1">案例 1：雏菊花田</a></li>
-      <li><a href="#case2">案例 2：女孩与狐狸</a></li>
-      <li><a href="#case3">案例 3：玻璃蛙微距</a></li>
-      <li><a href="#case4">案例 4：京剧花旦</a></li>
-    </ul>
+
+  <!-- 视频指南导航 -->
+  <div class="nav-pane nav-video active" data-pane="video">
+    <a href="#about-avatar" class="nav-top-link">关于人像素材</a>
+    <hr>
+    <div class="nav-group">
+      <div class="nav-group-title open" data-target="nav-beginner">入门篇</div>
+      <ul id="nav-beginner">
+        <li><a href="#case1">案例 1：雏菊花田</a></li>
+        <li><a href="#case2">案例 2：女孩与狐狸</a></li>
+        <li><a href="#case3">案例 3：玻璃蛙微距</a></li>
+        <li><a href="#case4">案例 4：京剧花旦</a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title open" data-target="nav-intermediate">进阶级</div>
+      <ul id="nav-intermediate">
+        <li><a href="#case5">案例 5：360 度环绕</a></li>
+        <li><a href="#case6">案例 6：替换画面物体</a></li>
+        <li><a href="#case7">案例 7：房屋外观改造</a></li>
+        <li><a href="#case8">案例 8：多段视频串联</a></li>
+        <li><a href="#case9">案例 9：沙漠绿洲</a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title open" data-target="nav-expert">高手篇</div>
+      <ul id="nav-expert">
+        <li><a href="#case10">案例 10：果茶广告</a></li>
+        <li><a href="#case11">案例 11：冰淇淋云朵</a></li>
+        <li><a href="#case12">案例 12：越野摩托广告</a></li>
+        <li><a href="#case13">案例 13：美妆带货</a></li>
+        <li><a href="#case14">案例 14：二次编辑</a></li>
+      </ul>
+    </div>
+    <hr>
+    <a href="#index-video" class="nav-top-link">快速索引</a>
   </div>
-  <div class="nav-group">
-    <div class="nav-group-title open" data-target="nav-intermediate">进阶级</div>
-    <ul id="nav-intermediate">
-      <li><a href="#case5">案例 5：360 度环绕</a></li>
-      <li><a href="#case6">案例 6：替换画面物体</a></li>
-      <li><a href="#case7">案例 7：房屋外观改造</a></li>
-      <li><a href="#case8">案例 8：多段视频串联</a></li>
-      <li><a href="#case9">案例 9：沙漠绿洲</a></li>
-    </ul>
+
+  <!-- 图片指南导航 -->
+  <div class="nav-pane nav-image" data-pane="image">
+    <a href="#image-params" class="nav-top-link">关于图片参数</a>
+    <hr>
+    <div class="nav-group">
+      <div class="nav-group-title open" data-target="nav-img-beginner">图片 · 入门篇</div>
+      <ul id="nav-img-beginner">
+        <li><a href="#icase1">图例 1：信息图（咖啡机）</a></li>
+        <li><a href="#icase2">图例 2：写实摄影（老水手）</a></li>
+        <li><a href="#icase3">图例 3：世界知识（1969 人群）</a></li>
+        <li><a href="#icase4">图例 4：LOGO 设计（4 选 1）</a></li>
+        <li><a href="#icase5">图例 5：广告大片（街头品牌）</a></li>
+        <li><a href="#icase6">图例 6：故事漫画（4 格）</a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title open" data-target="nav-img-intermediate">图片 · 进阶级</div>
+      <ul id="nav-img-intermediate">
+        <li><a href="#icase7">图例 7：图片文字翻译</a></li>
+        <li><a href="#icase8">图例 8：风格迁移</a></li>
+        <li><a href="#icase9">图例 9：虚拟试衣</a></li>
+        <li><a href="#icase10">图例 10：手绘渲染成真</a></li>
+        <li><a href="#icase11">图例 11：产品抠图</a></li>
+        <li><a href="#icase12">图例 12：物体移除</a></li>
+        <li><a href="#icase13">图例 13：光线天气改造</a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title open" data-target="nav-img-expert">图片 · 高手篇</div>
+      <ul id="nav-img-expert">
+        <li><a href="#icase14">图例 14：图内真实文字</a></li>
+        <li><a href="#icase15">图例 15：人物放入场景</a></li>
+        <li><a href="#icase16">图例 16：多图融合</a></li>
+        <li><a href="#icase17">图例 17：精准局部编辑</a></li>
+        <li><a href="#icase18">图例 18：节日营销视觉</a></li>
+        <li><a href="#icase19">图例 19：绘本角色一致性</a></li>
+      </ul>
+    </div>
+    <hr>
+    <a href="#index-image" class="nav-top-link">快速索引</a>
   </div>
-  <div class="nav-group">
-    <div class="nav-group-title open" data-target="nav-expert">高手篇</div>
-    <ul id="nav-expert">
-      <li><a href="#case10">案例 10：果茶广告</a></li>
-      <li><a href="#case11">案例 11：冰淇淋云朵</a></li>
-      <li><a href="#case12">案例 12：越野摩托广告</a></li>
-      <li><a href="#case13">案例 13：美妆带货</a></li>
-      <li><a href="#case14">案例 14：二次编辑</a></li>
-    </ul>
-  </div>
-  <hr>
-  <a href="#index" class="nav-top-link">快速索引</a>
 </nav>
 
 <!-- ====== 主内容区 ====== -->
 <div class="main-content">
+
+<!-- ====== 视频指南内容 ====== -->
+<div class="content-pane content-video active" data-pane="video">
 
 <!-- ====== 关于人像素材 ====== -->
 <div class="knowledge" id="about-avatar">
@@ -696,8 +768,8 @@
   </div>
 </div>
 
-<!-- ====== 快速索引 ====== -->
-<h2 class="section-title" id="index">快速索引</h2>
+<!-- ====== 视频快速索引 ====== -->
+<h2 class="section-title" id="index-video">视频快速索引</h2>
 <table class="index-table">
   <tr><th>难度</th><th>案例</th><th>输入类型</th><th>核心能力</th></tr>
   <tr><td>★</td><td>1. 雏菊花田</td><td>纯文本</td><td>文生视频</td></tr>
@@ -716,6 +788,543 @@
   <tr><td>★★★★★</td><td>14. 二次编辑</td><td>文本 + 模型产物视频</td><td>迭代创作</td></tr>
 </table>
 
+</div><!-- /.content-video -->
+
+<!-- ====== 图片指南内容 ====== -->
+<div class="content-pane content-image" data-pane="image">
+
+<!-- ====== 图片生成分隔 ====== -->
+<div class="header" style="padding:28px 24px 24px;margin-top:24px;border-radius:10px;">
+  <h1 style="font-size:1.6em;margin-bottom:8px;">图片生成案例</h1>
+  <p style="opacity:0.85;font-size:0.92em;">下方图片生成指南，按难度循序渐进包含19个案例。文生图只需一句话，图生图则用一张或多张参考图配合提示词完成编辑、换装、抠图、融合等操作。</p>
+</div>
+
+<!-- ====== 关于图片参数 ====== -->
+<div class="knowledge" id="image-params">
+  <h3>关于图片参数</h3>
+  <p>图片案例的「输入参数」用大白话标注，对照说明如下：</p>
+  <table>
+    <tr><th>参数名</th><th>含义</th></tr>
+    <tr><td><strong>模型</strong></td><td>本次使用的图片生成模型（本部分案例均为 gpt-image-2）。</td></tr>
+    <tr><td><strong>图片比例</strong></td><td>输出画面的宽高比，如 2:3 竖图、3:2 横图、16:9 横图。竖图适合海报、信息图、手机端；横图适合风景、场景。</td></tr>
+    <tr><td><strong>画质</strong></td><td>普通即常规出图速度更快；高清细节更丰富，适合最终交付。</td></tr>
+    <tr><td><strong>参考图还原度</strong></td><td>编辑类操作时，决定多忠于原图。设为「高」会尽量保留原图的人物、构图、背景，只改你要改的部分。</td></tr>
+    <tr><td><strong>生成数量</strong></td><td>同一段提示词一次产出几张图，便于多方案挑选。</td></tr>
+  </table>
+  <blockquote>简单规律：文生图从零创作；图生图=参考图 + 提示词，改什么就在提示词里说清楚，并把「参考图还原度」设高，避免画面目全非。</blockquote>
+</div>
+
+<!-- ====== 图片入门篇 ====== -->
+<h2 class="section-title" id="img-beginner">图片入门篇：一句话生成图片</h2>
+
+<!-- 图例 1 -->
+<div class="case" id="icase1">
+  <div class="case-header">
+    <h3>图例 1：文生图 — 咖啡机信息图</h3>
+    <span class="difficulty diff-easy">难度 ★☆☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：用一句话描述想画的图，AI 就能生成结构清晰的信息图。适合做产品原理图、流程说明、教学海报。</div>
+    <h4>提示词</h4>
+    <blockquote>制作一张详尽的信息图，展示类似 Jura 这样的全自动咖啡机的工作原理和流程。从豆仓、研磨、秤、水箱、锅炉等环节，我希望在技术和视觉上理解整个流程。</blockquote>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase01-output.png" alt="咖啡机信息图">
+  </div>
+</div>
+
+<!-- 图例 2 -->
+<div class="case" id="icase2">
+  <div class="case-header">
+    <h3>图例 2：文生图 — 写实摄影（老水手）</h3>
+    <span class="difficulty diff-mid">难度 ★★☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：用细致的描述让 AI 生成一张「像真拍出来」的写实照片。关键在于指定镜头、光线、皮肤纹理等细节，并明确「不要美化、不要过度修图」。</div>
+    <h4>提示词</h4>
+    <blockquote>创作一张写实的抓拍照片：一位年迈的水手站在小渔船上。他的皮肤饱经风霜，能看到清晰的皱纹、毛孔和日晒纹理，手臂上有几处褪色的传统水手纹身。他正平静地整理渔网，身旁的甲板上趴着他的狗。用 35mm 胶片质感拍摄，眼睛平视的中近景，50mm 镜头。柔和的海岸日光，浅景深，轻微胶片颗粒，自然的色彩平衡。画面要真实自然、毫不做作，有真实的皮肤纹理、磨损的材质和日常细节。不要美化，不要过度修图。</blockquote>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase02-output.png" alt="写实摄影-老水手">
+  </div>
+</div>
+
+<!-- 图例 3 -->
+<div class="case" id="icase3">
+  <div class="case-header">
+    <h3>图例 3：文生图 — 世界知识（1969 人群）</h3>
+    <span class="difficulty diff-easy">难度 ★☆☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：AI 内置丰富的世界知识，指定具体时间地点，就能生成符合时代背景的真实场景（服装、布景、环境都贴合年代）。</div>
+    <h4>提示词</h4>
+    <blockquote>创作一个写实的户外人群场景，地点是 1969 年 8 月 16 日的纽约州贝塞尔。写实风格，服装、布景和环境都要符合那个年代。</blockquote>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase03-output.png" alt="1969人群场景">
+  </div>
+</div>
+
+<!-- 图例 4 -->
+<div class="case" id="icase4">
+  <div class="case-header">
+    <h3>图例 4：文生图 — LOGO 设计（4 选 1）</h3>
+    <span class="difficulty diff-mid">难度 ★★☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：一次生成多个方案供挑选。提示词强调「简约、矢量感、可放大缩小都清晰、纯色背景」，适合拿来做品牌标志。</div>
+    <h4>提示词</h4>
+    <blockquote>为一家名为 Field &amp; Flour 的本地面包店设计一个原创、不侵权的标志。风格温暖、简约、经久耐看。使用干净的矢量感形状、清晰的剪影和平衡的留白。优先简洁而非细节，使其在大小尺寸下都清晰可辨。扁平设计，极简线条，除非必要不用渐变。纯色背景。交付一个居中、留有充足边距的标志。无水印。</blockquote>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+      <tr><th>生成数量</th><td>4 张</td></tr>
+    </table>
+    <h4>成品</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <img src="image2-media/icase04-output-1.png" alt="LOGO方案1">
+      <img src="image2-media/icase04-output-2.png" alt="LOGO方案2">
+      <img src="image2-media/icase04-output-3.png" alt="LOGO方案3">
+      <img src="image2-media/icase04-output-4.png" alt="LOGO方案4">
+    </div>
+  </div>
+</div>
+
+<!-- 图例 5 -->
+<div class="case" id="icase5">
+  <div class="case-header">
+    <h3>图例 5：文生图 — 广告大片（街头品牌）</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：生成一张可直接用于投放的时尚广告大片。关键是在提示词里讲清品牌调性、目标人群、构图方向，并要求「标语只出现一次、清晰可读」。</div>
+    <h4>提示词</h4>
+    <blockquote>为一个名为 Thread 的品牌做一张有文化感的酷炫广告 / 时尚大片。这是一个年轻潮牌街头品牌。广告画面是一群朋友聚在一起，配有标语「Yours to Create.」。要有面向年轻街头人群的精修广告大片质感：时尚、当代、有活力且有品位。构图干净、色彩方向强烈、姿态自然，带有高级时尚摄影的质感。标语只出现一次，清晰可读，融入版面。无多余文字、无水印、无无关标志。</blockquote>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase05-output.png" alt="Thread广告大片">
+  </div>
+</div>
+
+<!-- 图例 6 -->
+<div class="case" id="icase6">
+  <div class="case-header">
+    <h3>图例 6：文生图 — 故事漫画（4 格）</h3>
+    <span class="difficulty diff-mid">难度 ★★☆☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：用一段提示词生成多格漫画，讲一个完整小故事。逐格写清楚画面即可，AI 会保持统一的漫画风格。</div>
+    <h4>提示词</h4>
+    <blockquote>创作一个竖版漫画风格短片，4 个等大画格。画格 1：主人从前门离开，宠物被框在身后的窗户里，在玻璃映衬下显得很小，眼睛睁大，爪子高高贴着玻璃，房子突然安静下来。画格 2：门「咔哒」关上，寂静被打破，宠物缓缓转向空荡荡的房子，姿态变化，眼神敏锐、充满可能。画格 3：房子变了样，宠物霸占整张沙发，好像这里归它管，旁边有碎屑，阳光像聚光灯一样斜照进房间。画格 4：门开了，宠物端端正正坐在入口旁，警觉而从容，仿佛什么都没发生过。</blockquote>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase06-output.png" alt="4格故事漫画">
+  </div>
+</div>
+
+<!-- ====== 图片进阶级 ====== -->
+<h2 class="section-title" id="img-intermediate">图片进阶级：图生图 / 编辑图片</h2>
+
+<!-- 图例 7 -->
+<div class="case" id="icase7">
+  <div class="case-header">
+    <h3>图例 7：图片文字翻译 — 信息图转西班牙语</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：把图里的文字换成另一种语言，其他一切不变。非常适合把已有的信息图、海报快速本地化成多语言版本。</div>
+    <h4>提示词</h4>
+    <blockquote>将信息图中的文字翻译成西班牙语，不要改变图片的任何其他部分。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">待翻译的图片（图例 1 的咖啡机信息图）：</p>
+    <img src="image2-media/icase07-input.png" alt="原图-咖啡机信息图">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase07-output.png" alt="西班牙语版信息图">
+  </div>
+</div>
+
+<!-- 图例 8 -->
+<div class="case" id="icase8">
+  <div class="case-header">
+    <h3>图例 8：风格迁移 — 像素风摩托车</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：给一张参考图，AI 会学习它的画风，再按你的提示词用同样的风格画新内容。本例用像素风参考图，生成一张像素风摩托车。</div>
+    <h4>提示词</h4>
+    <blockquote>沿用输入图片的画风，生成一个骑着摩托车的男人，白色背景。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">风格参考图（像素风）：</p>
+    <img src="image2-media/icase08-input.png" alt="像素风参考图">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase08-output.png" alt="像素风摩托车">
+  </div>
+</div>
+
+<!-- 图例 9 -->
+<div class="case" id="icase9">
+  <div class="case-header">
+    <h3>图例 9：虚拟试衣 — 博物馆女士换装</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：给一张人物照片 + 几件服装图，AI 把衣服「穿」到人身上，但脸、身材、姿势、背景完全不变。提示词反复强调「只换衣服、不动人」是关键。</div>
+    <h4>提示词</h4>
+    <blockquote>编辑这张图片，用提供的服装为女士换装。不要改变她的脸、五官、肤色、身材、姿势或身份特征。保持她完全一致的容貌、表情、发型和比例。只替换服装，让衣物自然贴合她现有的姿势和身体，面料效果真实。匹配原图的光线、阴影和色温，让整套搭配融入得逼真自然，不像贴上去的。不要改变背景、拍摄角度、构图或画质，不要添加配饰、文字、标志或水印。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">人物照片（博物馆里的女士）：</p>
+    <img src="image2-media/icase09-input-woman.png" alt="人物照片">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <img src="image2-media/icase09-input-tank.png" alt="背心">
+      <img src="image2-media/icase09-input-jacket.png" alt="夹克">
+      <img src="image2-media/icase09-input-boots.png" alt="靴子">
+    </div>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase09-output.png" alt="换装成品">
+  </div>
+</div>
+
+<!-- 图例 10 -->
+<div class="case" id="icase10">
+  <div class="case-header">
+    <h3>图例 10：手绘渲染成真 — 山谷变实景</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：把草图变成写实照片，同时保留原有的布局、比例和透视。适合建筑、景观、产品手稿的快速效果图。</div>
+    <h4>提示词</h4>
+    <blockquote>将这张手绘图变成写实照片。保留原有的布局、比例和透视。选择与草图意图一致的写实材质和光线。不要添加新元素或文字。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">手绘草图（山谷）：</p>
+    <img src="image2-media/icase10-input.png" alt="山谷手绘">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase10-output.png" alt="山谷实景渲染">
+  </div>
+</div>
+
+<!-- 图例 11 -->
+<div class="case" id="icase11">
+  <div class="case-header">
+    <h3>图例 11：产品抠图 — 洗发水白底图</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：把产品从原背景里抠出来，放到纯白背景上，并完全保留瓶身外形和标签文字，只加一点真实接触阴影。电商主图常用。</div>
+    <h4>提示词</h4>
+    <blockquote>将输入图片中的产品抠出，放在纯白不透明背景上。输出：产品居中、轮廓清晰、无白边毛刺。完全保留产品的外形和标签文字。只做轻度打磨，加一点真实的接触阴影。不要给产品重新设计，只去背景并轻度打磨。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">原图（洗发水产品）：</p>
+    <img src="image2-media/icase11-input.png" alt="洗发水原图">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+      <tr><th>背景</th><td>纯白</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase11-output.png" alt="白底产品图">
+  </div>
+</div>
+
+<!-- 图例 12 -->
+<div class="case" id="icase12">
+  <div class="case-header">
+    <h3>图例 12：物体移除 — 拿掉手中的花</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：精准去掉图里的某个物体，其他完全不动。把「参考图还原度」设高，能保证只删目标、不伤背景。</div>
+    <h4>提示词</h4>
+    <blockquote>拿掉男人手中的花，其他任何地方都不要改动。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">原图（手持花的男人）：</p>
+    <img src="image2-media/icase12-input.png" alt="手持花的男人">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+      <tr><th>参考图还原度</th><td>高</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase12-output.png" alt="移除花后">
+  </div>
+</div>
+
+<!-- 图例 13 -->
+<div class="case" id="icase13">
+  <div class="case-header">
+    <h3>图例 13：光线天气改造 — 广告牌变冬夜雪景</h3>
+    <span class="difficulty diff-mid">难度 ★★★☆☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：只改光线和天气，画面里的产品、文字、构图都保留。一句话就能把同一张广告图换成不同季节氛围。</div>
+    <h4>提示词</h4>
+    <blockquote>让画面看起来像飘雪的冬夜。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">原图（日落公路边的洗发水广告牌，即图例 14 的成品）：</p>
+    <img src="image2-media/icase13-input.png" alt="原广告牌">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+      <tr><th>参考图还原度</th><td>高</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase13-output.png" alt="冬夜雪景广告牌">
+  </div>
+</div>
+
+<!-- ====== 图片高手篇 ====== -->
+<h2 class="section-title" id="img-expert">图片高手篇：多图融合 / 复杂工作流</h2>
+
+<!-- 图例 14 -->
+<div class="case" id="icase14">
+  <div class="case-header">
+    <h3>图例 14：图内真实文字 — 洗发水广告牌</h3>
+    <span class="difficulty diff-hard">难度 ★★★★☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：把产品放进真实场景，并在画面里直接写出指定的广告语，文字清晰、只出现一次。适合做户外广告、电商场景图。</div>
+    <h4>提示词</h4>
+    <blockquote>制作一个写实的广告牌合成图：洗发水出现在日落时分的公路场景中。广告牌文字（必须逐字一致，不多不少）：「Fresh and clean」。字体：粗体无衬线，高对比，居中，字距干净。确保文字只出现一次且完全清晰可读。无水印、无标志。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">产品图（洗发水）：</p>
+    <img src="image2-media/icase14-input.png" alt="洗发水产品">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase14-output.png" alt="广告牌成品">
+  </div>
+</div>
+
+<!-- 图例 15 -->
+<div class="case" id="icase15">
+  <div class="case-header">
+    <h3>图例 15：人物放入场景 — 女士逃遇棕熊</h3>
+    <span class="difficulty diff-hard">难度 ★★★★☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：把人物照片里的同一个人放进一个全新的动作场景，保持她的脸和身份不变，但姿态、环境完全改变。提示词反复要求「像真实抓拍、不要电影感」。</div>
+    <h4>提示词</h4>
+    <blockquote>生成一个高度写实的动作场景：这个人正逃离一头体型很大、逼真的棕熊，棕熊正在袭击一个营地。画面要像别人随手拍到的真实照片，而不是过度加工或电影海报般的画面。她在画面中央但视线朝外，穿着户外露营装束，脸上有泥土、衣服有破损。她明显害怕但专注于逃跑，背后棕熊正在破坏营地。营地位于优胜美地国家公园，细节真实自然。时间是黄昏，光线和色彩自然。整体要接地气、真实、不加修饰，像真实瞬间捕捉到的画面。避免电影感打光、戏剧化调色或风格化构图。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">人物照片（博物馆里的女士）：</p>
+    <img src="image2-media/icase15-input.png" alt="人物照片">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+      <tr><th>参考图还原度</th><td>高</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase15-output.png" alt="女士逃遇棕熊">
+  </div>
+</div>
+
+<!-- 图例 16 -->
+<div class="case" id="icase16">
+  <div class="case-header">
+    <h3>图例 16：多图融合 — 把狗放进照片</h3>
+    <span class="difficulty diff-hard">难度 ★★★★☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：给两张图，AI 把第二张里的元素（这里是狗）放进第一张的场景，并自动匹配光线、构图和背景风格。</div>
+    <h4>提示词</h4>
+    <blockquote>把第二张图里的狗放进第一张图的场景中，正好放在女士旁边，使用相同的光线、构图和背景风格。其他任何地方都不要改动。</blockquote>
+    <h4>输入素材</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <img src="image2-media/icase16-input-1.png" alt="第一张-女士场景">
+      <img src="image2-media/icase16-input-2.png" alt="第二张-狗">
+    </div>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+      <tr><th>参考图还原度</th><td>高</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase16-output.png" alt="女士与狗融合">
+  </div>
+</div>
+
+<!-- 图例 17 -->
+<div class="case" id="icase17">
+  <div class="case-header">
+    <h3>图例 17：精准局部编辑 — 厨房椅子换木质</h3>
+    <span class="difficulty diff-hard">难度 ★★★★☆</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：只替换画面里的某类物件（本例：白色椅子 → 木质椅子），拍摄角度、光线、地板阴影、周围物品全部保持不变。室内设计、家装预览常用。</div>
+    <h4>提示词</h4>
+    <blockquote>在这张房间照片里，只把白色椅子换成木质椅子。保持拍摄角度、室内光线、地板阴影和周围物品不变。保持画面其他所有方面不变。写实接触阴影和织物纹理。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">原图（厨房）：</p>
+    <img src="image2-media/icase17-input.jpg" alt="厨房原图">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>3:2（横图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品</h4>
+    <img src="image2-media/icase17-output.png" alt="椅子换木质后">
+  </div>
+</div>
+
+<!-- 图例 18 -->
+<div class="case" id="icase18">
+  <div class="case-header">
+    <h3>图例 18：节日营销视觉 — 贺卡与收藏品包装</h3>
+    <span class="difficulty diff-hard">难度 ★★★★★</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：两个独立的节日营销视觉案例。共同技巧：场景描述 + 氛围 + 风格 + 约束（仅原创 / 无商标 / 无水印），并指定画面里要出现的精确文案。</div>
+    <h4>提示词（A · 节日贺卡）</h4>
+    <blockquote>制作一张圣诞节日贺卡插画。场景：温馨的圣诞场景，一只旧泰迪熊坐在一个纪念盒里，毛皮略显磨损，针脚处有温柔修补，放在一扇飘雪的窗边。场景暗示孩子已经长大，但记忆依旧。氛围：温暖、怀旧、温柔、走心。风格：高端节日贺卡摄影，柔和电影感打光，写实纹理，浅景深，精致的光斑装饰，高印刷品质构图。约束：仅原创作品；无商标；无水印；无标志。贺卡文字只保留这一句（逐字）：「Merry Christmas — some memories never fade.」</blockquote>
+    <h4>提示词（B · 收藏品包装）</h4>
+    <blockquote>制作一个收藏级人偶：一架复古风玩具螺旋桨飞机，机翼圆润，前置旋转螺旋桨，漆面边缘略显磨损，经典童年比例，设计为怀旧节日收藏品，装在吸塑包装里。概念：受孩子们冬天假期常玩的简单玩具飞机启发的怀旧节日收藏品，唤起温暖、想象和童年惊奇。风格：高端玩具摄影，写实塑料和喷漆金属纹理，影棚打光，浅景深，清晰标签印刷，高端零售陈列。约束：仅原创设计；无商标；无水印；无标志。包装文字只保留这一句（逐字）：「Christmas Memories Edition」</blockquote>
+    <h4>输入素材</h4>
+    <p style="color:#999;">无</p>
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品（A · 贺卡）</h4>
+    <img src="image2-media/icase18-output-1.png" alt="圣诞贺卡">
+    <h4>成品（B · 收藏品包装）</h4>
+    <img src="image2-media/icase18-output-2.png" alt="收藏品包装">
+  </div>
+</div>
+
+<!-- 图例 19 -->
+<div class="case" id="icase19">
+  <div class="case-header">
+    <h3>图例 19：绘本角色一致性 — 两步连贯创作</h3>
+    <span class="difficulty diff-hard">难度 ★★★★★</span>
+  </div>
+  <div class="case-body">
+    <div class="desc"><strong>说明</strong>：先「定锚」生成主角，再用第一步的成品当输入，生成同一角色的下一个故事场景。关键是第二步反复强调角色的服装、五官、比例、色彩完全一致，做到跨页角色不变形。</div>
+    <h4>提示词（第 1 步 · 角色定锚）</h4>
+    <blockquote>创作一幅儿童绘本插画，介绍主角。角色：一位年轻的、绘本风格的小英雄，灵感来自林间小盗侠，穿着简单的绿色连帽罩衫、柔软的棕色靴子，腰间挂着小布袋。表情善良，眼神温柔，气质勇敢而温暖。随身带着一把小木弓，只用来帮助他人、绝不伤人。主题：角色保护和营救松鼠、小鸟、兔子等林间小动物。风格：儿童绘本插画，手绘水彩质感，柔和轮廓，温暖大地色，奇趣且友善。比例适合绘本（头略大、表情丰富）。约束：原创角色（无版权角色）；无文字；无水印；纯森林背景以清晰展示角色。</blockquote>
+    <h4>提示词（第 2 步 · 故事延续）</h4>
+    <blockquote>用同一个角色继续儿童绘本故事。场景：同一位林间小英雄正温柔地把一只受惊的松鼠从倒下的树里救出来，这是冬日暴风雪之后。角色跪在松鼠身旁，给予安抚。角色一致性：同一件绿色连帽罩衫；同样的五官、比例和色彩；同样温柔、英勇的性格。风格：儿童绘本水彩插画，柔和光线，雪天森林环境，温暖治愈的氛围。约束：不要重新设计角色；无文字；无水印。</blockquote>
+    <h4>输入素材</h4>
+    <p class="media-label">第 2 步的输入 = 第 1 步的成品（同账号内的模型产物）：</p>
+    <img src="image2-media/icase19-output-1.png" alt="绘本第1页-角色定锚">
+    <h4>输入参数</h4>
+    <table class="param-table">
+      <tr><th>模型</th><td>gpt-image-2</td></tr>
+      <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
+      <tr><th>画质</th><td>普通</td></tr>
+    </table>
+    <h4>成品（第 1 步 · 角色定锚）</h4>
+    <img src="image2-media/icase19-output-1.png" alt="绘本角色定锚">
+    <h4>成品（第 2 步 · 故事延续）</h4>
+    <img src="image2-media/icase19-output-2.png" alt="绘本故事延续">
+  </div>
+</div>
+
+<!-- ====== 图片快速索引 ====== -->
+<h2 class="section-title" id="index-image">图片快速索引</h2>
+<table class="index-table">
+  <tr><th>难度</th><th>图片案例</th><th>输入类型</th><th>核心能力</th></tr>
+  <tr><td>★</td><td>图 1. 咖啡机信息图</td><td>纯文本</td><td>文生图 · 信息图</td></tr>
+  <tr><td>★★</td><td>图 2. 老水手写实摄影</td><td>纯文本</td><td>文生图 · 写实摄影</td></tr>
+  <tr><td>★</td><td>图 3. 1969 人群</td><td>纯文本</td><td>文生图 · 世界知识</td></tr>
+  <tr><td>★★</td><td>图 4. LOGO 设计</td><td>纯文本</td><td>文生图 · 多方案</td></tr>
+  <tr><td>★★★</td><td>图 5. 广告大片</td><td>纯文本</td><td>文生图 · 图内文字</td></tr>
+  <tr><td>★★</td><td>图 6. 4 格故事漫画</td><td>纯文本</td><td>文生图 · 多格叙事</td></tr>
+  <tr><td>★★★</td><td>图 7. 图片文字翻译</td><td>文本 + 1图</td><td>图生图 · 文字本地化</td></tr>
+  <tr><td>★★★</td><td>图 8. 像素风摩托车</td><td>文本 + 1图</td><td>图生图 · 风格迁移</td></tr>
+  <tr><td>★★★</td><td>图 9. 虚拟试衣</td><td>文本 + 人物 + 服装图</td><td>图生图 · 换装</td></tr>
+  <tr><td>★★★</td><td>图 10. 手绘渲染成真</td><td>文本 + 1图</td><td>图生图 · 草图渲染</td></tr>
+  <tr><td>★★★</td><td>图 11. 产品抠图白底</td><td>文本 + 1图</td><td>图生图 · 抠图</td></tr>
+  <tr><td>★★★</td><td>图 12. 物体移除</td><td>文本 + 1图</td><td>图生图 · 精准删除</td></tr>
+  <tr><td>★★★</td><td>图 13. 光线天气改造</td><td>文本 + 1图</td><td>图生图 · 氛围替换</td></tr>
+  <tr><td>★★★★</td><td>图 14. 广告牌场景</td><td>文本 + 1图</td><td>图生图 · 场景合成 + 文字</td></tr>
+  <tr><td>★★★★</td><td>图 15. 人物放入场景</td><td>文本 + 1图</td><td>图生图 · 人物入画</td></tr>
+  <tr><td>★★★★</td><td>图 16. 多图融合</td><td>文本 + 2图</td><td>图生图 · 多图合成</td></tr>
+  <tr><td>★★★★</td><td>图 17. 厨房椅子换木质</td><td>文本 + 1图</td><td>图生图 · 精准局部编辑</td></tr>
+  <tr><td>★★★★★</td><td>图 18. 节日营销视觉</td><td>纯文本</td><td>文生图 · 营销视觉 + 文案</td></tr>
+  <tr><td>★★★★★</td><td>图 19. 绘本角色一致性</td><td>文本 + 模型产物图</td><td>图生图 · 两步连贯创作</td></tr>
+</table>
+
+</div><!-- /.content-image -->
+
 </div><!-- .main-content -->
 </div><!-- .layout -->
 
@@ -726,6 +1335,18 @@ document.querySelectorAll('.nav-group-title').forEach(function(el) {
     this.classList.toggle('open');
     var ul = document.getElementById(this.dataset.target);
     if (ul) ul.classList.toggle('collapsed');
+  });
+});
+
+// Tab 切换：视频指南 / 图片指南
+document.querySelectorAll('.tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    var target = this.dataset.tab;
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+    this.classList.add('active');
+    document.querySelectorAll('.nav-pane').forEach(function(p) { p.classList.toggle('active', p.dataset.pane === target); });
+    document.querySelectorAll('.content-pane').forEach(function(p) { p.classList.toggle('active', p.dataset.pane === target); });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });
 </script>
