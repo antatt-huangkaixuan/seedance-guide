@@ -267,10 +267,6 @@
 
 <div class="header">
   <h1>蚁伴 AI 创作案例指南</h1>
-  <div class="meta">
-    <span>作者：黄凯旋</span>
-    <span>湖南蚂蚁塔科技有限公司</span>
-  </div>
   <p style="margin-top:10px;opacity:0.75;font-size:0.9em;">本文档按难度循序渐进整理了视频与图片生成模型的典型用法。每个案例包含说明、提示词、输入素材、输入参数、成品五部分，普通用户照着做即可。</p>
 </div>
 
@@ -808,10 +804,9 @@
     <tr><td><strong>模型</strong></td><td>本次使用的图片生成模型（本部分案例均为 gpt-image-2）。</td></tr>
     <tr><td><strong>图片比例</strong></td><td>输出画面的宽高比，如 2:3 竖图、3:2 横图、16:9 横图。竖图适合海报、信息图、手机端；横图适合风景、场景。</td></tr>
     <tr><td><strong>画质</strong></td><td>普通即常规出图速度更快；高清细节更丰富，适合最终交付。</td></tr>
-    <tr><td><strong>参考图还原度</strong></td><td>编辑类操作时，决定多忠于原图。设为「高」会尽量保留原图的人物、构图、背景，只改你要改的部分。</td></tr>
     <tr><td><strong>生成数量</strong></td><td>同一段提示词一次产出几张图，便于多方案挑选。</td></tr>
   </table>
-  <blockquote>简单规律：文生图从零创作；图生图=参考图 + 提示词，改什么就在提示词里说清楚，并把「参考图还原度」设高，避免画面目全非。</blockquote>
+  <blockquote>简单规律：文生图从零创作；图生图=参考图 + 提示词，改什么就在提示词里说清楚，避免画面面目全非。</blockquote>
 </div>
 
 <!-- ====== 图片入门篇 ====== -->
@@ -1097,7 +1092,7 @@
     <span class="difficulty diff-mid">难度 ★★★☆☆</span>
   </div>
   <div class="case-body">
-    <div class="desc"><strong>说明</strong>：精准去掉图里的某个物体，其他完全不动。把「参考图还原度」设高，能保证只删目标、不伤背景。</div>
+    <div class="desc"><strong>说明</strong>：精准去掉图里的某个物体，其他完全不动。把改动范围设小，能保证只删目标、不伤背景。</div>
     <h4>提示词</h4>
     <blockquote>拿掉男人手中的花，其他任何地方都不要改动。</blockquote>
     <h4>输入素材</h4>
@@ -1108,7 +1103,6 @@
       <tr><th>模型</th><td>gpt-image-2</td></tr>
       <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
       <tr><th>画质</th><td>普通</td></tr>
-      <tr><th>参考图还原度</th><td>高</td></tr>
     </table>
     <h4>成品</h4>
     <img src="image2-media/icase12-output.png" alt="移除花后">
@@ -1133,7 +1127,6 @@
       <tr><th>模型</th><td>gpt-image-2</td></tr>
       <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
       <tr><th>画质</th><td>普通</td></tr>
-      <tr><th>参考图还原度</th><td>高</td></tr>
     </table>
     <h4>成品</h4>
     <img src="image2-media/icase13-output.png" alt="冬夜雪景广告牌">
@@ -1185,7 +1178,6 @@
       <tr><th>模型</th><td>gpt-image-2</td></tr>
       <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
       <tr><th>画质</th><td>普通</td></tr>
-      <tr><th>参考图还原度</th><td>高</td></tr>
     </table>
     <h4>成品</h4>
     <img src="image2-media/icase15-output.png" alt="女士逃遇棕熊">
@@ -1212,7 +1204,6 @@
       <tr><th>模型</th><td>gpt-image-2</td></tr>
       <tr><th>图片比例</th><td>2:3（竖图）</td></tr>
       <tr><th>画质</th><td>普通</td></tr>
-      <tr><th>参考图还原度</th><td>高</td></tr>
     </table>
     <h4>成品</h4>
     <img src="image2-media/icase16-output.png" alt="女士与狗融合">
